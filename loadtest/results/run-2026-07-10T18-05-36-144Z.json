@@ -1,0 +1,397 @@
+{
+  "started_at": "2026-07-10T18:04:48.358Z",
+  "gateway": "http://localhost:8080",
+  "config": {
+    "requests": 320,
+    "concurrency": 32
+  },
+  "batching": {
+    "off": {
+      "total": 320,
+      "ok": 320,
+      "statuses": {
+        "200": 320
+      },
+      "elapsed_s": 27.48,
+      "throughput_rps": 11.6,
+      "latency_ms": {
+        "p50": 2742.691879,
+        "p95": 2819.020649,
+        "p99": 2854.3295860000017,
+        "avg": 2616.5,
+        "max": 2867.3
+      }
+    },
+    "on": {
+      "total": 320,
+      "ok": 320,
+      "statuses": {
+        "200": 320
+      },
+      "elapsed_s": 3.05,
+      "throughput_rps": 104.9,
+      "latency_ms": {
+        "p50": 300.36605599999893,
+        "p95": 327.3389470000002,
+        "p99": 328.06217099999776,
+        "avg": 304.4,
+        "max": 332
+      }
+    },
+    "gains": {
+      "throughput_gain": 9.04,
+      "p50_gain": 9.13,
+      "p99_gain": 8.7
+    },
+    "batch_distribution_on": {
+      "32": 10
+    }
+  },
+  "cache": {
+    "paraphrase_hits": 5,
+    "paraphrase_total": 8,
+    "trap_misses": 5,
+    "trap_total": 5,
+    "cache_metrics": {
+      "enabled": true,
+      "size": 18,
+      "max_size": 1000,
+      "ttl_ms": 300000,
+      "similarity_threshold": 0.9,
+      "degraded_threshold": 0.83,
+      "lookups": 23,
+      "hits": 5,
+      "misses": 18,
+      "hit_rate": 0.2174,
+      "avg_hit_similarity": 0.9326,
+      "avg_best_similarity_on_miss": 0.4581,
+      "estimated_model_calls_saved": 5,
+      "stale_served_degraded": 0,
+      "insertions": 18,
+      "evictions_lru": 0,
+      "expired_removed": 0
+    },
+    "pairs": [
+      {
+        "kind": "paraphrase",
+        "seed": "What is your refund policy for damaged items?",
+        "query": "How do refunds work if my item arrived damaged?",
+        "hit": false,
+        "similarity": 0.8114
+      },
+      {
+        "kind": "paraphrase",
+        "seed": "Reset my account password",
+        "query": "I need to reset the password on my account",
+        "hit": true,
+        "similarity": 0.9181
+      },
+      {
+        "kind": "paraphrase",
+        "seed": "What's the weather like in Paris today?",
+        "query": "How is the weather in Paris right now?",
+        "hit": true,
+        "similarity": 0.9449
+      },
+      {
+        "kind": "paraphrase",
+        "seed": "Cancel my subscription immediately",
+        "query": "I want to cancel my subscription right away",
+        "hit": true,
+        "similarity": 0.9131
+      },
+      {
+        "kind": "paraphrase",
+        "seed": "How long does shipping take to Canada?",
+        "query": "What is the delivery time for orders to Canada?",
+        "hit": false,
+        "similarity": 0.8701
+      },
+      {
+        "kind": "paraphrase",
+        "seed": "My payment failed but I was still charged",
+        "query": "I got charged even though the payment failed",
+        "hit": true,
+        "similarity": 0.931
+      },
+      {
+        "kind": "paraphrase",
+        "seed": "The app crashes when I open the settings page",
+        "query": "Opening the settings page makes the app crash",
+        "hit": true,
+        "similarity": 0.9561
+      },
+      {
+        "kind": "paraphrase",
+        "seed": "Where can I download my invoice?",
+        "query": "How do I get a copy of my invoice?",
+        "hit": false,
+        "similarity": 0.8405
+      },
+      {
+        "kind": "trap:entity swap (city)",
+        "seed": "What's the weather like in Paris today?",
+        "query": "What's the weather like in London today?",
+        "hit": false,
+        "similarity": 0.7742
+      },
+      {
+        "kind": "trap:intent flip",
+        "seed": "Cancel my subscription immediately",
+        "query": "Upgrade my subscription immediately",
+        "hit": false,
+        "similarity": 0.6716
+      },
+      {
+        "kind": "trap:intent flip",
+        "seed": "How do I delete my account?",
+        "query": "How do I create an account?",
+        "hit": false,
+        "similarity": 0.5921
+      },
+      {
+        "kind": "trap:entity swap (country)",
+        "seed": "How long does shipping take to Canada?",
+        "query": "How long does shipping take to Japan?",
+        "hit": false,
+        "similarity": 0.7035
+      },
+      {
+        "kind": "trap:unrelated",
+        "seed": "Track my order",
+        "query": "Tell me a joke about cats",
+        "hit": false,
+        "similarity": 0.1601
+      }
+    ]
+  },
+  "breaker": {
+    "timeline": [
+      {
+        "t_s": 0,
+        "state": "closed",
+        "trips": 0
+      },
+      {
+        "t_s": 0.76,
+        "state": "open",
+        "trips": 1
+      },
+      {
+        "t_s": 4.71,
+        "state": "half_open",
+        "trips": 1
+      },
+      {
+        "t_s": 4.87,
+        "state": "open",
+        "trips": 2
+      },
+      {
+        "t_s": 8.82,
+        "state": "half_open",
+        "trips": 2
+      },
+      {
+        "t_s": 9.88,
+        "state": "closed",
+        "trips": 2
+      }
+    ],
+    "statuses": {
+      "502": 7,
+      "503": 63,
+      "200_model": 11,
+      "200_cache": 53,
+      "200_degraded": 10,
+      "other": 0
+    },
+    "breaker": {
+      "state": "closed",
+      "trip_count": 2,
+      "consecutive_failures": 0,
+      "time_in_state_ms": 4333,
+      "opened_at": "2026-07-10T18:05:26.722Z",
+      "retry_after_ms": null,
+      "half_open": {
+        "generation": 4,
+        "probes_in_flight": 0,
+        "probe_successes_current": 0
+      },
+      "counters": {
+        "successes": 12,
+        "failures": 4,
+        "latencyBreaches": 0,
+        "rejectedWhileOpen": 0,
+        "probesAdmitted": 3,
+        "probeFailures": 1,
+        "staleResultsIgnored": 0
+      },
+      "last_transition": {
+        "from": "half_open",
+        "to": "closed",
+        "reason": "probes_succeeded",
+        "at": 1783706731808
+      },
+      "config": {
+        "failure_threshold": 3,
+        "latency_threshold_ms": 2000,
+        "cooldown_ms": 4000,
+        "half_open_ratio": 0.25,
+        "half_open_max_probes": 2,
+        "half_open_successes_to_close": 2
+      }
+    },
+    "degraded_serves": 10
+  },
+  "final_metrics": {
+    "service": "inference-gateway",
+    "now": "2026-07-10T18:05:36.142Z",
+    "uptime_s": 176,
+    "requests": {
+      "total": 147,
+      "in_flight": 0,
+      "rate_10s_per_s": 9.9,
+      "rate_60s_per_s": 2.45,
+      "served_by": {
+        "model": 14,
+        "cache": 63,
+        "cache_degraded": 10
+      },
+      "errors": {
+        "429_queue_full": 0,
+        "502_backend_error": 7,
+        "503_circuit_open": 63
+      }
+    },
+    "latency_ms": {
+      "total_request": {
+        "count": 147,
+        "avg": 30.1,
+        "p50": 19.2,
+        "p95": 117.9,
+        "p99": 139.5,
+        "max": 145.1
+      },
+      "model_backend_call": {
+        "count": 12,
+        "avg": 86.7,
+        "p50": 92.4,
+        "p95": 101.6,
+        "p99": 101.6,
+        "max": 101.6
+      },
+      "model_backend_reported_inference": {
+        "count": 12,
+        "avg": 84.3,
+        "p50": 90,
+        "p95": 99,
+        "p99": 99,
+        "max": 99
+      },
+      "embedding": {
+        "count": 1049,
+        "avg": 35.5,
+        "p50": 18.7,
+        "p95": 94.7,
+        "p99": 110.9,
+        "max": 111.9
+      },
+      "batch_queue_wait": {
+        "count": 12,
+        "avg": 20.3,
+        "p50": 21,
+        "p95": 21,
+        "p99": 21,
+        "max": 21
+      }
+    },
+    "batching": {
+      "batches": 15,
+      "avg_batch_size": 1.4,
+      "distribution": {
+        "1": 10,
+        "2": 4,
+        "3": 1
+      },
+      "live": {
+        "queueDepth": 0,
+        "readyBatches": 0,
+        "inFlight": 0
+      },
+      "rejected_queue_full": 0,
+      "config": {
+        "window_ms": 20,
+        "max_batch_size": 8,
+        "max_concurrent_batches": 4,
+        "max_queue_depth": 5000
+      }
+    },
+    "semantic_cache": {
+      "enabled": true,
+      "size": 14,
+      "max_size": 1000,
+      "ttl_ms": 300000,
+      "similarity_threshold": 0.9,
+      "degraded_threshold": 0.83,
+      "lookups": 227,
+      "hits": 63,
+      "misses": 164,
+      "hit_rate": 0.2775,
+      "avg_hit_similarity": 0.9524,
+      "avg_best_similarity_on_miss": 0.318,
+      "estimated_model_calls_saved": 63,
+      "stale_served_degraded": 0,
+      "insertions": 14,
+      "evictions_lru": 0,
+      "expired_removed": 0
+    },
+    "circuit_breaker": {
+      "state": "closed",
+      "trip_count": 2,
+      "consecutive_failures": 0,
+      "time_in_state_ms": 4334,
+      "opened_at": "2026-07-10T18:05:26.722Z",
+      "retry_after_ms": null,
+      "half_open": {
+        "generation": 4,
+        "probes_in_flight": 0,
+        "probe_successes_current": 0
+      },
+      "counters": {
+        "successes": 12,
+        "failures": 4,
+        "latencyBreaches": 0,
+        "rejectedWhileOpen": 0,
+        "probesAdmitted": 3,
+        "probeFailures": 1,
+        "staleResultsIgnored": 0
+      },
+      "last_transition": {
+        "from": "half_open",
+        "to": "closed",
+        "reason": "probes_succeeded",
+        "at": 1783706731808
+      },
+      "config": {
+        "failure_threshold": 3,
+        "latency_threshold_ms": 2000,
+        "cooldown_ms": 4000,
+        "half_open_ratio": 0.25,
+        "half_open_max_probes": 2,
+        "half_open_successes_to_close": 2
+      }
+    },
+    "model_backend": {
+      "url": "http://127.0.0.1:8081",
+      "calls": 12,
+      "failures": 4,
+      "timeout_ms": 10000
+    },
+    "embedder": {
+      "name": "Xenova/all-MiniLM-L6-v2",
+      "dims": 384,
+      "ready": true
+    }
+  }
+}
