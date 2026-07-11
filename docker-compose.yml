@@ -1,0 +1,95 @@
+# Real-Time AI Inference Serving System
+# One command starts everything:   docker compose up --build
+# Optional load test (after up):   docker compose --profile loadtest run --rm loadtest
+services:
+  model-backend:
+    build:
+      context: ./services/model-backend
+    environment:
+      PORT: "8081"
+      MODEL_MODE: ${MODEL_MODE:-stub} # stub | real (real = ONNX DistilBERT, downloads on first start)
+      STUB_BASE_MS: ${STUB_BASE_MS:-80} # fixed per-batch cost (GPU kernel-launch equivalent)
+      STUB_PER_ITEM_MS: ${STUB_PER_ITEM_MS:-6} # marginal cost per batched item
+      STUB_JITTER_STD_MS: ${STUB_JITTER_STD_MS:-12}
+      STUB_CONCURRENCY: ${STUB_CONCURRENCY:-1} # 1 = single simulated device
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "8081:8081" # exposed for the load test's fault-injection admin API
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8081/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: ./services/gateway
+    depends_on:
+      model-backend:
+        condition: service_healthy
+    environment:
+      PORT: "8080"
+      MODEL_BACKEND_URL: http://model-backend:8081
+      MODEL_TIMEOUT_MS: ${MODEL_TIMEOUT_MS:-10000}
+      # --- dynamic batching ---
+      BATCH_WINDOW_MS: ${BATCH_WINDOW_MS:-50}
+      BATCH_MAX_SIZE: ${BATCH_MAX_SIZE:-32}
+      BATCH_MAX_CONCURRENT: ${BATCH_MAX_CONCURRENT:-4}
+      BATCH_MAX_QUEUE: ${BATCH_MAX_QUEUE:-500}
+      # --- semantic cache ---
+      CACHE_ENABLED: ${CACHE_ENABLED:-true}
+      CACHE_SIMILARITY_THRESHOLD: ${CACHE_SIMILARITY_THRESHOLD:-0.9}
+      CACHE_DEGRADED_THRESHOLD: ${CACHE_DEGRADED_THRESHOLD:-0.83}
+      CACHE_TTL_MS: ${CACHE_TTL_MS:-300000}
+      CACHE_MAX_SIZE: ${CACHE_MAX_SIZE:-1000}
+      CACHE_SERVE_STALE_WHEN_OPEN: ${CACHE_SERVE_STALE_WHEN_OPEN:-true}
+      # --- circuit breaker ---
+      BREAKER_FAILURE_THRESHOLD: ${BREAKER_FAILURE_THRESHOLD:-3}
+      BREAKER_LATENCY_THRESHOLD_MS: ${BREAKER_LATENCY_THRESHOLD_MS:-2000}
+      BREAKER_COOLDOWN_MS: ${BREAKER_COOLDOWN_MS:-10000}
+      BREAKER_HALF_OPEN_RATIO: ${BREAKER_HALF_OPEN_RATIO:-0.25}
+      BREAKER_HALF_OPEN_MAX_PROBES: ${BREAKER_HALF_OPEN_MAX_PROBES:-2}
+      BREAKER_HALF_OPEN_SUCCESSES_TO_CLOSE: ${BREAKER_HALF_OPEN_SUCCESSES_TO_CLOSE:-2}
+      # --- observability / demo ---
+      EXPOSE_META: ${EXPOSE_META:-true}
+      ADMIN_ENABLED: ${ADMIN_ENABLED:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8080/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 24
+      start_period: 10s
+    restart: unless-stopped
+
+  # Optional: run the phased load test inside the compose network.
+  #   docker compose --profile loadtest run --rm loadtest
+  loadtest:
+    profiles: ["loadtest"]
+    image: node:20-bookworm-slim
+    working_dir: /work
+    volumes:
+      - ./loadtest:/work/loadtest
+    environment:
+      GATEWAY_URL: http://gateway:8080
+      BACKEND_URL: http://model-backend:8081
+    depends_on:
+      gateway:
+        condition: service_healthy
+    command: ["node", "loadtest/run.mjs"]
