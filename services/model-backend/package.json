@@ -1,0 +1,27 @@
+{
+  "name": "model-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Model backend: a GPU-realistic inference stub (or a real ONNX classifier) behind a batch /infer API",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.5.0",
+    "fastify": "^5.3.0",
+    "pino": "^9.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.1.0"
+  }
+}

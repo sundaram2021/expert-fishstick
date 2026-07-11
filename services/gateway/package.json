@@ -1,0 +1,29 @@
+{
+  "name": "inference-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real-time AI inference serving layer: dynamic batching, semantic caching, circuit breaking, observability",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "warmup": "node dist/scripts/warmup-model.js",
+    "calibrate": "node dist/scripts/calibrate.js"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.5.0",
+    "fastify": "^5.3.0",
+    "pino": "^9.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.1.0"
+  }
+}
