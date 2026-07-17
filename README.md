@@ -351,16 +351,3 @@ cache interface, or the observability contract.
   serialized device) is the property batching exploits, and `MODEL_MODE=real` runs a
   genuine ONNX classifier through the identical contract to prove model-agnosticism.
 - **`/admin/*` and response `meta` are demo affordances** — flag-gated, off in prod.
-
-## 9. What the graders will ask (answered above)
-
-- *A request arrives while a batch is mid-flight* → §1, paragraph 2.
-- *Why this similarity threshold, and what happens at the margin* → §2 (measured
-  calibration table, overlap analysis, margin behavior, mitigations).
-- *How to extend to 10x load* → §7.
-
----
-
-*Built for the HevaAI Backend Engineer Assignment 2. All performance numbers in this
-README were produced by `loadtest/run.mjs` on this exact code (results JSON committed
-under `loadtest/results/`).*
